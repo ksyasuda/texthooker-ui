@@ -440,21 +440,9 @@
 	function handleMissedLine() {
 		clearTimeout($flashOnPauseTimeout$);
 
-		if ($theme$ === Theme.GARDEN) {
-			settingsContainer.classList.add('bg-base-200');
-			settingsContainer.classList.remove('bg-base-100');
-			document.body.classList.add('bg-base-200');
-		}
-
 		document.body.classList.add('animate-[pulse_0.5s_cubic-bezier(0.4,0,0.6,1)_1]');
 
 		$flashOnPauseTimeout$ = window.setTimeout(() => {
-			if ($theme$ === Theme.GARDEN) {
-				settingsContainer.classList.add('bg-base-100');
-				settingsContainer.classList.remove('bg-base-200');
-				document.body.classList.remove('bg-base-200');
-			}
-
 			document.body.classList.remove('animate-[pulse_0.5s_cubic-bezier(0.4,0,0.6,1)_1]');
 		}, 500);
 	}
@@ -608,7 +596,7 @@
 
 <DialogManager />
 
-<header class="fixed top-0 right-0 flex justify-end items-center p-2 bg-base-100" bind:this={settingsContainer}>
+<header class="fixed top-0 right-0 left-0 flex justify-end items-center px-3 py-2" bind:this={settingsContainer}>
 	<Stats on:afkBlur={onAfkBlur} />
 	{#if $websocketUrl$}
 		<SocketConnector />
