@@ -4,6 +4,7 @@
 		"target": "ESNext",
 		"useDefineForClassFields": true,
 		"module": "ESNext",
+		"typeRoots": ["./node_modules/@types"],
 		"resolveJsonModule": true,
 		"allowJs": true,
 		"checkJs": true,
