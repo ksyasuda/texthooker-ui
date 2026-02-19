@@ -121,6 +121,7 @@
 	const dispatch = createEventDispatcher<{ layoutChange: void; maxLinesChange: void }>();
 	const onlineFonts = [
 		OnlineFont.OFF,
+		OnlineFont.MPLUS1,
 		OnlineFont.NOTO,
 		OnlineFont.KLEE,
 		OnlineFont.SHIPPORI,
@@ -665,7 +666,7 @@
 	<input class="hidden" type="file" bind:this={settingsFileInput} on:change={handleSettingsFileChange} />
 	<input class="hidden" type="file" bind:this={presetFileInput} on:change={handlePresetFileChange} />
 	<div
-		class="flex flex-col max-[800px]:w-[90vw] min-[800px]:grid grid-cols-[max-content,auto,max-content,auto] gap-3 absolute overflow-auto h-[90vh] top-11 z-10 py-4 pr-8 pl-4 border bg-base-200 overscroll-contain"
+		class="flex flex-col max-[800px]:w-[90vw] min-[800px]:grid grid-cols-[max-content,auto,max-content,auto] gap-3 absolute right-0 overflow-auto h-[90vh] top-11 z-10 py-4 pr-8 pl-4 border bg-base-200 overscroll-contain"
 		use:clickOutside={handleSettingsClick}
 	>
 		<div class="mb-2" style="grid-column: 1/5;">

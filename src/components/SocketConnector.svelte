@@ -105,9 +105,9 @@
 
 {#if $socketState !== 0}
 	<div
-		class="hover:text-primary"
-		class:text-red-500={$socketState !== -1}
-		class:text-green-700={$socketState === 1}
+		class="socket-indicator hover:text-primary"
+		class:socket-disconnected={$socketState !== 1}
+		class:socket-connected={$socketState === 1}
 		class:hidden={!$showConnectionIcon$}
 		title={connectedWithLabel}
 	>
@@ -115,7 +115,21 @@
 	</div>
 {:else}
 	<span
-		class="animate-ping relative inline-flex rounded-full h-3 w-3 mx-3 bg-primary"
+		class="animate-ping relative inline-flex rounded-full h-3 w-3 mx-3 socket-ping"
 		class:hidden={!$showConnectionIcon$}
 	/>
 {/if}
+
+<style>
+	.socket-disconnected {
+		color: var(--sm-red, #ed8796);
+	}
+
+	.socket-connected {
+		color: var(--sm-green, #a6da95);
+	}
+
+	.socket-ping {
+		background: var(--sm-accent, #8aadf4);
+	}
+</style>

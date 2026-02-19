@@ -187,7 +187,7 @@
 
 	.copy-btn:hover {
 		color: var(--sm-accent, #8aadf4);
-		background: var(--sm-hover-bg, rgba(138, 173, 244, 0.04));
+		background: var(--sm-surface-bright, #494d64);
 	}
 
 	.copy-btn.copied {

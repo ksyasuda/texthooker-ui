@@ -32,6 +32,7 @@ export enum Theme {
 
 export enum OnlineFont {
 	OFF = 'Off',
+	MPLUS1 = 'M PLUS 1',
 	NOTO = 'Noto Serif JP',
 	KLEE = 'Klee One',
 	SHIPPORI = 'Shippori Mincho',

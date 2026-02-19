@@ -14,15 +14,6 @@
 	font-display: swap;
 }
 
-body,
-html {
-	margin: 0;
-	display: flex;
-	flex: 1;
-	min-height: 100%;
-	overflow: auto;
-}
-
 /* SUBMINER_DEFAULT_STYLE_START */
 :root {
 	/* Catppuccin Macchiato */
@@ -88,7 +79,7 @@ header.fixed {
 	background: var(--sm-glass);
 	backdrop-filter: blur(20px) saturate(1.15);
 	-webkit-backdrop-filter: blur(20px) saturate(1.15);
-	border-bottom: 1px solid var(--sm-border);
+	border-bottom: 1px solid var(--sm-border-strong);
 	z-index: 50;
 }
 
@@ -99,7 +90,7 @@ header.bg-base-200 {
 
 main,
 main.flex {
-	font-family: 'Noto Sans CJK JP', 'Hiragino Sans', system-ui, sans-serif;
+	font-family: 'M PLUS 1', 'Noto Sans CJK JP', 'Hiragino Sans', system-ui, sans-serif;
 	padding: 3.5rem min(4vw, 2rem) 0.5rem;
 	line-height: 1.8;
 	gap: 0;
@@ -107,7 +98,7 @@ main.flex {
 
 p,
 p.cursor-pointer {
-	font-family: 'Noto Sans CJK JP', 'Hiragino Sans', system-ui, sans-serif;
+	font-family: 'M PLUS 1', 'Noto Sans CJK JP', 'Hiragino Sans', system-ui, sans-serif;
 	font-size: clamp(18px, 2vw, 26px);
 	letter-spacing: 0.04em;
 	line-height: 1.75;
@@ -163,6 +154,14 @@ header svg {
 	transition: color 0.18s ease, opacity 0.18s ease;
 }
 
+header .timer {
+	color: var(--sm-subtext);
+}
+
+header .timer .blur:not(:hover) {
+	color: var(--sm-text-muted);
+}
+
 .bg-base-200[class*="fixed"][class*="z-[60]"] {
 	background: var(--sm-mantle);
 	border-left: 1px solid var(--sm-border-strong);
@@ -182,6 +181,17 @@ header svg {
 	border: 1px solid var(--sm-border-strong);
 	border-radius: 10px;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+	color: var(--sm-text);
+}
+
+.alert-info {
+	background: var(--sm-surface-raised);
+	border-color: var(--sm-accent);
+}
+
+.alert-error {
+	background: var(--sm-surface-raised);
+	border-color: var(--sm-red);
 }
 
 .input,
