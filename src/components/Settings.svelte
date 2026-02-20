@@ -59,6 +59,10 @@
 		showCharacterCount$,
 		showConnectionErrors$,
 		showConnectionIcon$,
+		enableKnownWordColoring$,
+		enableNPlusOneColoring$,
+		enableFrequencyColoring$,
+		enableJlptColoring$,
 		showLineCount$,
 		showPresetQuickSwitch$,
 		showSpeed$,
@@ -1002,6 +1006,14 @@
 		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$showConnectionErrors$} />
 		<span class="label-text">Show Connection Icon</span>
 		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$showConnectionIcon$} />
+		<span class="label-text">Highlight Known Word</span>
+		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableKnownWordColoring$} />
+		<span class="label-text">Highlight N+1</span>
+		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableNPlusOneColoring$} />
+		<span class="label-text">Highlight Frequency</span>
+		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableFrequencyColoring$} />
+		<span class="label-text">Highlight JLPT</span>
+		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableJlptColoring$} />
 		<span class="label-text" style="grid-column: 1/5;">Custom CSS</span>
 		<textarea
 			class="p-1 min-h-[10rem] font-mono"

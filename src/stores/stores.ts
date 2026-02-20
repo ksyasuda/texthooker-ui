@@ -64,6 +64,10 @@ export const defaultSettings: Settings = {
 	continuousReconnect$: true,
 	showConnectionErrors$: true,
 	showConnectionIcon$: true,
+	enableKnownWordColoring$: true,
+	enableNPlusOneColoring$: true,
+	enableFrequencyColoring$: true,
+	enableJlptColoring$: true,
 	customCSS$: '',
 };
 
@@ -246,6 +250,26 @@ export const showConnectionIcon$ = writableBooleanSubject()(
 	defaultSettings.showConnectionIcon$
 );
 
+export const enableKnownWordColoring$ = writableBooleanSubject()(
+	'bannou-texthooker-enableKnownWordColoring',
+	defaultSettings.enableKnownWordColoring$
+);
+
+export const enableNPlusOneColoring$ = writableBooleanSubject()(
+	'bannou-texthooker-enableNPlusOneColoring',
+	defaultSettings.enableNPlusOneColoring$
+);
+
+export const enableFrequencyColoring$ = writableBooleanSubject()(
+	'bannou-texthooker-enableFrequencyColoring',
+	defaultSettings.enableFrequencyColoring$
+);
+
+export const enableJlptColoring$ = writableBooleanSubject()(
+	'bannou-texthooker-enableJlptColoring',
+	defaultSettings.enableJlptColoring$
+);
+
 export const customCSS$ = writableStringSubject()('bannou-texthooker-customCSS', defaultSettings.customCSS$);
 
 export const timeValue$ = writableNumberSubject()('bannou-texthooker-timeValue', 0, persistStats$);
@@ -365,5 +389,9 @@ export async function resetAllData() {
 	continuousReconnect$.next(defaultSettings.continuousReconnect$);
 	showConnectionErrors$.next(defaultSettings.showConnectionErrors$);
 	showConnectionIcon$.next(defaultSettings.showConnectionIcon$);
+	enableKnownWordColoring$.next(defaultSettings.enableKnownWordColoring$);
+	enableNPlusOneColoring$.next(defaultSettings.enableNPlusOneColoring$);
+	enableFrequencyColoring$.next(defaultSettings.enableFrequencyColoring$);
+	enableJlptColoring$.next(defaultSettings.enableJlptColoring$);
 	customCSS$.next(defaultSettings.customCSS$);
 }

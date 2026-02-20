@@ -9,6 +9,7 @@ import {
 	socketState$,
 	websocketUrl$,
 } from './stores/stores';
+import { parseIncomingLineMessage } from './socket-message';
 
 import { LineType } from './types';
 
@@ -99,13 +100,7 @@ export class SocketConnection {
 	}
 
 	private handleMessage(event: MessageEvent) {
-		let line = event.data;
-
-		try {
-			line = JSON.parse(event.data)?.sentence || event.data;
-		} catch (_) {
-			// no-op
-		}
+		const line = parseIncomingLineMessage(event.data);
 
 		newLine$.next([line, LineType.SOCKET]);
 	}

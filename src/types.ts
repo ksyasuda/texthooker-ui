@@ -86,6 +86,10 @@ export interface Settings {
 	continuousReconnect$: boolean;
 	showConnectionErrors$: boolean;
 	showConnectionIcon$: boolean;
+	enableKnownWordColoring$: boolean;
+	enableNPlusOneColoring$: boolean;
+	enableFrequencyColoring$: boolean;
+	enableJlptColoring$: boolean;
 	customCSS$: string;
 }
 

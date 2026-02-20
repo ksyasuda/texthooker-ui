@@ -10,6 +10,7 @@
 		reverseLineOrder$,
 	} from '../stores/stores';
 	import type { LineItem, LineItemEditEvent } from '../types';
+	import { getPlainTextFromLineMarkup } from '../line-markup';
 	import { dummyFn, newLineCharacter, updateScroll } from '../util';
 	import Icon from './Icon.svelte';
 
@@ -54,7 +55,7 @@
 	});
 
 	function handleCopy() {
-		navigator.clipboard.writeText(line.text);
+		navigator.clipboard.writeText(getPlainTextFromLineMarkup(line.text));
 		copyFeedback = true;
 		setTimeout(() => (copyFeedback = false), 1000);
 	}
@@ -124,7 +125,7 @@
 			on:keyup={dummyFn}
 			bind:this={paragraph}
 		>
-			{line.text}
+			{@html line.text}
 		</p>
 		{#if !pipWindow && !isEditable}
 			<button

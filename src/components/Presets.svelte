@@ -18,7 +18,11 @@
 		enableAfkBlur$,
 		enableAfkBlurRestart$,
 		enableExternalClipboardMonitor$,
+		enableFrequencyColoring$,
+		enableJlptColoring$,
 		enableLineAnimation$,
+		enableKnownWordColoring$,
+		enableNPlusOneColoring$,
 		enablePaste$,
 		filterNonCJKLines$,
 		flashOnMissedLine$,
@@ -111,6 +115,10 @@
 			continuousReconnect$: $continuousReconnect$,
 			showConnectionErrors$: $showConnectionErrors$,
 			showConnectionIcon$: $showConnectionIcon$,
+			enableKnownWordColoring$: $enableKnownWordColoring$,
+			enableNPlusOneColoring$: $enableNPlusOneColoring$,
+			enableFrequencyColoring$: $enableFrequencyColoring$,
+			enableJlptColoring$: $enableJlptColoring$,
 			customCSS$: $customCSS$,
 		};
 	}
@@ -173,6 +181,16 @@
 		continuousReconnect$.next(preset.settings.continuousReconnect$ ?? defaultSettings.continuousReconnect$);
 		showConnectionErrors$.next(preset.settings.showConnectionErrors$ ?? defaultSettings.showConnectionErrors$);
 		showConnectionIcon$.next(preset.settings.showConnectionIcon$ ?? defaultSettings.showConnectionIcon$);
+		enableKnownWordColoring$.next(
+			preset.settings.enableKnownWordColoring$ ?? defaultSettings.enableKnownWordColoring$,
+		);
+		enableNPlusOneColoring$.next(
+			preset.settings.enableNPlusOneColoring$ ?? defaultSettings.enableNPlusOneColoring$,
+		);
+		enableFrequencyColoring$.next(
+			preset.settings.enableFrequencyColoring$ ?? defaultSettings.enableFrequencyColoring$,
+		);
+		enableJlptColoring$.next(preset.settings.enableJlptColoring$ ?? defaultSettings.enableJlptColoring$);
 		customCSS$.next(preset.settings.customCSS$ ?? defaultSettings.customCSS$);
 
 		if (updateLastPreset) {

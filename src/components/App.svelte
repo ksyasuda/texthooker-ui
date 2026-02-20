@@ -27,6 +27,10 @@
 		displayVertical$,
 		enabledReplacements$,
 		enablePaste$,
+		enableFrequencyColoring$,
+		enableJlptColoring$,
+		enableKnownWordColoring$,
+		enableNPlusOneColoring$,
 		filterNonCJKLines$,
 		flashOnMissedLine$,
 		flashOnPauseTimeout$,
@@ -63,6 +67,7 @@
 		reduceToEmptyString,
 		updateScroll,
 	} from '../util';
+	import { getPlainTextFromLineMarkup, normalizeLineMarkupForDisplay } from '../line-markup';
 	import DialogManager from './DialogManager.svelte';
 	import Icon from './Icon.svelte';
 	import Line from './Line.svelte';
@@ -95,7 +100,9 @@
 
 	const uniqueLines$ = preventGlobalDuplicate$.pipe(
 		map((preventGlobalDuplicate) =>
-			preventGlobalDuplicate ? new Set<string>($lineData$.map((line) => line.text)) : new Set<string>(),
+			preventGlobalDuplicate
+				? new Set<string>($lineData$.map((line) => getNormalizedLineTextForComparison(line.text)))
+				: new Set<string>(),
 		),
 	);
 
@@ -302,7 +309,7 @@
 		$lineData$ = $lineData$;
 		$actionHistory$ = [...$actionHistory$, [{ ...removedLine, index: $lineData$.length }]];
 
-		$uniqueLines$.delete(removedLine.text);
+		$uniqueLines$.delete(getNormalizedLineTextForComparison(removedLine.text));
 	}
 
 	function removeLines() {
@@ -316,7 +323,7 @@
 
 			if (hasLine) {
 				newActionHistory.push({ ...oldLine, index: index - newActionHistory.length });
-				$uniqueLines$.delete(oldLine.text);
+				$uniqueLines$.delete(getNormalizedLineTextForComparison(oldLine.text));
 			}
 
 			return !hasLine;
@@ -447,11 +454,22 @@
 		}, 500);
 	}
 
+	function getNormalizedLineTextForComparison(text: string) {
+		const plainText = getPlainTextFromLineMarkup(text);
+		return $removeAllWhitespace$ ? plainText.replace(/\s/gm, '').trim() : plainText;
+	}
+
 	function transformLine(text: string, useReplacements = true) {
 		const textToAppend = useReplacements ? applyReplacements(text, $enabledReplacements$) : text;
+		const renderedLine = normalizeLineMarkupForDisplay(textToAppend, {
+			enableKnownWordColoring: $enableKnownWordColoring$,
+			enableNPlusOneColoring: $enableNPlusOneColoring$,
+			enableFrequencyColoring: $enableFrequencyColoring$,
+			enableJlptColoring: $enableJlptColoring$,
+		});
 
 		let canAppend = true;
-		let lineToAppend = $removeAllWhitespace$ ? textToAppend.replace(/\s/gm, '').trim() : textToAppend;
+		let lineToAppend = getNormalizedLineTextForComparison(renderedLine);
 
 		if ($filterNonCJKLines$ && !lineToAppend.match(cjkCharacters)) {
 			lineToAppend = '';
@@ -463,10 +481,12 @@
 			canAppend = !$uniqueLines$.has(lineToAppend);
 			$uniqueLines$.add(lineToAppend);
 		} else if ($preventLastDuplicate$ && $lineData$.length) {
-			canAppend = $lineData$.slice(-$preventLastDuplicate$).every((line) => line.text !== lineToAppend);
+			canAppend = $lineData$
+				.slice(-$preventLastDuplicate$)
+				.every((line) => getNormalizedLineTextForComparison(line.text) !== lineToAppend);
 		}
 
-		return canAppend ? lineToAppend : undefined;
+		return canAppend ? renderedLine : undefined;
 	}
 
 	function handleLineEdit(event) {
@@ -482,8 +502,8 @@
 
 			if (text) {
 				$actionHistory$ = [...$actionHistory$, [{ ...data.line, index: data.lineIndex }]];
-				$uniqueLines$.delete(data.originalText);
-				$uniqueLines$.add(text);
+				$uniqueLines$.delete(getNormalizedLineTextForComparison(data.originalText));
+				$uniqueLines$.add(getNormalizedLineTextForComparison(text));
 			} else {
 				tick().then(
 					() =>
@@ -507,7 +527,7 @@
 						if (index < startIndex) {
 							oldLinesToRemove.add(oldLine.id);
 
-							$uniqueLines$.delete(oldLine.text);
+							$uniqueLines$.delete(getNormalizedLineTextForComparison(oldLine.text));
 							return false;
 						}
 
@@ -535,7 +555,7 @@
 				const newText = transformLine(line.text);
 
 				if (newText && newText !== line.text) {
-					$uniqueLines$.delete(line.text);
+					$uniqueLines$.delete(getNormalizedLineTextForComparison(line.text));
 
 					$lineData$[index] = { ...line, text: newText };
 				}
@@ -566,9 +586,10 @@
 		const lastIndex = currentLineData.length - 1;
 		const comparisonIndex = lastIndex - 1;
 		const lastLine = currentLineData[lastIndex];
-		const comparisonLine = currentLineData[comparisonIndex].text;
+		const lastLineText = getNormalizedLineTextForComparison(lastLine.text);
+		const comparisonLine = getNormalizedLineTextForComparison(currentLineData[comparisonIndex].text);
 
-		if (lastLine.text.startsWith(comparisonLine)) {
+		if (lastLineText.startsWith(comparisonLine)) {
 			$uniqueLines$.delete(comparisonLine);
 
 			selectedLineIds = selectedLineIds.filter(

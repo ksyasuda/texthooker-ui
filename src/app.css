@@ -33,6 +33,7 @@
 	--sm-accent-subtle: rgba(138, 173, 244, 0.06);
 	--sm-lavender: #b7bdf8;
 	--sm-mauve: #c6a0f6;
+	--sm-n-plus-one: #c6a0f6;
 	--sm-green: #a6da95;
 	--sm-red: #ed8796;
 	--sm-peach: #f5a97f;
@@ -256,5 +257,76 @@ details summary:hover {
 
 *::-webkit-scrollbar-thumb:hover {
 	background: var(--sm-scrollbar-hover);
+}
+
+p .word.word-known {
+	color: var(--sm-green);
+}
+
+p .word.word-n-plus-one {
+	color: var(--sm-n-plus-one);
+}
+
+p .word.word-jlpt-n1 {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: #ed8796;
+}
+
+p .word.word-jlpt-n2 {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: #f5a97f;
+}
+
+p .word.word-jlpt-n3 {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: #f9e2af;
+}
+
+p .word.word-jlpt-n4 {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: #a6e3a1;
+}
+
+p .word.word-jlpt-n5 {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: #8aadf4;
+}
+
+p .word.word-frequency-single {
+	color: #f5a97f;
+}
+
+p .word.word-frequency-band-1 {
+	color: #ed8796;
+}
+
+p .word.word-frequency-band-2 {
+	color: #f5a97f;
+}
+
+p .word.word-frequency-band-3 {
+	color: #f9e2af;
+}
+
+p .word.word-frequency-band-4 {
+	color: #a6e3a1;
+}
+
+p .word.word-frequency-band-5 {
+	color: #8aadf4;
+}
+
+p .word.word-n-plus-one.word-frequency-single,
+p .word.word-n-plus-one.word-frequency-band-1,
+p .word.word-n-plus-one.word-frequency-band-2,
+p .word.word-n-plus-one.word-frequency-band-3,
+p .word.word-n-plus-one.word-frequency-band-4,
+p .word.word-n-plus-one.word-frequency-band-5 {
+	color: var(--sm-n-plus-one);
 }
 /* SUBMINER_DEFAULT_STYLE_END */
