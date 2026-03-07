@@ -204,6 +204,9 @@
 <style>
 	.timer {
 		transition: 0.1s filter linear;
+		font-variant-numeric: tabular-nums;
+		font-feature-settings: 'tnum';
+		letter-spacing: 0.02em;
 	}
 
 	.blur:hover {

@@ -86,6 +86,7 @@ header.fixed {
 	backdrop-filter: blur(20px) saturate(1.15);
 	-webkit-backdrop-filter: blur(20px) saturate(1.15);
 	border-bottom: 1px solid var(--sm-border-strong);
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
 	z-index: 50;
 }
 
@@ -104,6 +105,7 @@ main.flex {
 
 p,
 p.cursor-pointer {
+	position: relative;
 	font-family: 'M PLUS 1', 'Noto Sans CJK JP', 'Hiragino Sans', system-ui, sans-serif;
 	font-size: clamp(18px, 2vw, 26px);
 	letter-spacing: 0.04em;
@@ -122,7 +124,8 @@ p.cursor-pointer {
 p:hover,
 p.cursor-pointer:hover {
 	background: var(--sm-hover-bg);
-	border-left-color: var(--sm-hover-accent);
+	border-left-color: var(--sm-accent);
+	border-left-color: color-mix(in srgb, var(--sm-accent) 40%, transparent);
 }
 
 p:last-child,
@@ -131,9 +134,29 @@ p.cursor-pointer:last-child {
 }
 
 p + p,
-p.cursor-pointer + p.cursor-pointer,
-.line-row + .line-row p {
+p.cursor-pointer + p.cursor-pointer {
 	border-top: 1px solid var(--sm-border);
+}
+
+.line-row + .line-row p {
+	border-top: none;
+}
+
+.line-row + .line-row p::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 1.4rem;
+	right: 1.2rem;
+	height: 1px;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		var(--sm-border-strong) 15%,
+		var(--sm-border-strong) 85%,
+		transparent
+	);
+	pointer-events: none;
 }
 
 p.cursor-pointer.whitespace-pre-wrap {
@@ -157,7 +180,12 @@ header .hover\:text-primary:hover {
 }
 
 header svg {
-	transition: color 0.18s ease, opacity 0.18s ease;
+	transition: color 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+header [role="button"]:active svg,
+header .cursor-pointer:active svg {
+	transform: scale(0.9);
 }
 
 header .timer {
@@ -171,9 +199,30 @@ header .timer .blur:not(:hover) {
 .bg-base-200[class*="fixed"][class*="z-[60]"] {
 	background: var(--sm-mantle);
 	border-left: 1px solid var(--sm-border-strong);
+	box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2);
 }
 
-.bg-base-200[class*="absolute"][class*="overflow-auto"] {
+.bg-base-200[class*="fixed"][class*="z-[60]"] textarea {
+	background: var(--sm-crust);
+	color: var(--sm-text);
+	border: 1px solid var(--sm-border-strong);
+	border-radius: 8px;
+	padding: 1rem 1.2rem;
+	font-family: 'Noto Sans CJK JP', 'Hiragino Sans', system-ui, sans-serif;
+	font-size: 0.9rem;
+	line-height: 1.7;
+	letter-spacing: 0.02em;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bg-base-200[class*="fixed"][class*="z-[60]"] textarea:focus {
+	border-color: var(--sm-accent);
+	box-shadow: 0 0 0 2px var(--sm-accent-subtle);
+	outline: none;
+}
+
+.bg-base-200[class*="absolute"][class*="overflow-auto"],
+.bg-base-200[class*="grid"] {
 	background: var(--sm-mantle);
 	backdrop-filter: blur(24px);
 	-webkit-backdrop-filter: blur(24px);
@@ -182,11 +231,43 @@ header .timer .blur:not(:hover) {
 	box-shadow: -4px 4px 24px rgba(0, 0, 0, 0.15);
 }
 
+.bg-base-200 .label-text {
+	color: var(--sm-subtext);
+	font-size: 0.8rem;
+	letter-spacing: 0.01em;
+}
+
+.bg-base-200 details {
+	border-bottom: 1px solid var(--sm-border);
+	padding-bottom: 0.5rem;
+}
+
+.bg-base-200 details ul {
+	padding-left: 0.25rem;
+	margin-top: 0.5rem;
+}
+
+.bg-base-200 details ul li {
+	font-size: 0.8rem;
+}
+
+.bg-base-200 details ul li a {
+	color: var(--sm-text-muted);
+	transition: color 0.15s ease;
+	text-decoration: none;
+}
+
+.bg-base-200 details ul li a:hover {
+	color: var(--sm-accent);
+}
+
 .alert {
 	background: var(--sm-surface-raised);
 	border: 1px solid var(--sm-border-strong);
 	border-radius: 10px;
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 1px 4px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
 	color: var(--sm-text);
 }
 
@@ -198,6 +279,13 @@ header .timer .blur:not(:hover) {
 .alert-error {
 	background: var(--sm-surface-raised);
 	border-color: var(--sm-red);
+}
+
+.alert .btn-sm {
+	font-size: 0.75rem;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	font-weight: 600;
 }
 
 .input,
@@ -220,12 +308,37 @@ textarea:focus {
 
 .checkbox-primary {
 	border-color: var(--sm-surface-bright);
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.checkbox-primary:checked {
+	background-color: var(--sm-accent);
+	border-color: var(--sm-accent);
+}
+
+.checkbox-primary:focus-visible {
+	box-shadow: 0 0 0 2px var(--sm-accent-subtle);
+	outline: none;
 }
 
 .btn-primary {
 	background: var(--sm-accent);
 	border-color: var(--sm-accent);
 	border-radius: 6px;
+	transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:hover {
+	background: color-mix(in srgb, var(--sm-accent) 85%, white);
+	box-shadow: 0 2px 8px rgba(138, 173, 244, 0.2);
+}
+
+.btn-primary:active {
+	transform: scale(0.97);
+}
+
+.btn-ghost {
+	transition: background 0.15s ease, color 0.15s ease;
 }
 
 .btn-ghost:hover {
@@ -235,6 +348,10 @@ textarea:focus {
 details summary {
 	cursor: pointer;
 	color: var(--sm-subtext);
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
 	transition: color 0.18s ease;
 }
 
@@ -242,9 +359,17 @@ details summary:hover {
 	color: var(--sm-text);
 }
 
+details summary::marker {
+	color: var(--sm-surface-bright);
+}
+
 .milestone {
-	border-color: var(--sm-mauve) !important;
-	color: var(--sm-subtext);
+	border-color: color-mix(in srgb, var(--sm-mauve) 40%, transparent) !important;
+	color: var(--sm-text-muted);
+	font-size: 0.7rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	font-weight: 600;
 }
 
 *::-webkit-scrollbar {
@@ -262,6 +387,11 @@ details summary:hover {
 
 *::-webkit-scrollbar-thumb:hover {
 	background: var(--sm-scrollbar-hover);
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--sm-scrollbar) transparent;
 }
 
 p .word {

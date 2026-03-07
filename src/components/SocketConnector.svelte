@@ -115,12 +115,17 @@
 	</div>
 {:else}
 	<span
-		class="animate-ping relative inline-flex rounded-full h-3 w-3 mx-3 socket-ping"
+		class="relative inline-flex rounded-full h-2.5 w-2.5 mx-3 socket-ping"
 		class:hidden={!$showConnectionIcon$}
+		title="Connecting..."
 	/>
 {/if}
 
 <style>
+	.socket-indicator {
+		transition: color 0.2s ease;
+	}
+
 	.socket-disconnected {
 		color: var(--sm-red, #ed8796);
 	}
@@ -131,5 +136,11 @@
 
 	.socket-ping {
 		background: var(--sm-accent, #8aadf4);
+		animation: connect-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	}
+
+	@keyframes connect-pulse {
+		0%, 100% { opacity: 1; transform: scale(1); }
+		50% { opacity: 0.4; transform: scale(0.85); }
 	}
 </style>

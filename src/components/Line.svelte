@@ -171,28 +171,36 @@
 		position: absolute;
 		right: 0.5rem;
 		top: 50%;
-		transform: translateY(-50%);
+		transform: translateY(-50%) scale(0.92);
 		opacity: 0;
 		padding: 0.35rem;
 		border-radius: 6px;
-		border: none;
+		border: 1px solid var(--sm-border, transparent);
 		cursor: pointer;
 		color: var(--sm-text-muted, #6e738d);
 		background: var(--sm-surface-raised, #363a4f);
-		transition: opacity 0.18s ease, color 0.18s ease, background 0.18s ease;
+		transition: opacity 0.2s ease, color 0.15s ease, background 0.15s ease, transform 0.15s ease;
 	}
 
 	.line-row:hover .copy-btn {
-		opacity: 1;
+		opacity: 0.7;
+		transform: translateY(-50%) scale(1);
 	}
 
 	.copy-btn:hover {
+		opacity: 1 !important;
 		color: var(--sm-accent, #8aadf4);
 		background: var(--sm-surface-bright, #494d64);
+		border-color: var(--sm-border-strong, rgba(165, 173, 203, 0.12));
+	}
+
+	.copy-btn:active {
+		transform: translateY(-50%) scale(0.9);
 	}
 
 	.copy-btn.copied {
 		opacity: 1;
 		color: var(--sm-green, #a6da95);
+		transform: translateY(-50%) scale(1);
 	}
 </style>

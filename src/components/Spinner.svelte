@@ -24,6 +24,8 @@
 <style>
 	.spinner-backdrop {
 		background: rgba(0, 0, 0, 0.3);
+		backdrop-filter: blur(2px);
+		-webkit-backdrop-filter: blur(2px);
 	}
 
 	.spinner-svg {
