@@ -88,6 +88,7 @@ export interface Settings {
 	showConnectionIcon$: boolean;
 	enableKnownWordColoring$: boolean;
 	enableNPlusOneColoring$: boolean;
+	enableNameMatchColoring$: boolean;
 	enableFrequencyColoring$: boolean;
 	enableJlptColoring$: boolean;
 	customCSS$: string;
@@ -134,6 +135,7 @@ export enum LineType {
 export interface LineItem {
 	id: string;
 	text: string;
+	sourceText?: string;
 	index?: number;
 }
 

@@ -28,7 +28,12 @@
 		enableAfkBlur$,
 		enableAfkBlurRestart$,
 		enableExternalClipboardMonitor$,
+		enableFrequencyColoring$,
+		enableJlptColoring$,
 		enableLineAnimation$,
+		enableKnownWordColoring$,
+		enableNameMatchColoring$,
+		enableNPlusOneColoring$,
 		enablePaste$,
 		filterNonCJKLines$,
 		flashOnMissedLine$,
@@ -59,10 +64,6 @@
 		showCharacterCount$,
 		showConnectionErrors$,
 		showConnectionIcon$,
-		enableKnownWordColoring$,
-		enableNPlusOneColoring$,
-		enableFrequencyColoring$,
-		enableJlptColoring$,
 		showLineCount$,
 		showPresetQuickSwitch$,
 		showSpeed$,
@@ -122,7 +123,7 @@
 		}
 	}
 
-	const dispatch = createEventDispatcher<{ layoutChange: void; maxLinesChange: void }>();
+	const dispatch = createEventDispatcher<{ layoutChange: void; maxLinesChange: void; highlightChange: void }>();
 	const onlineFonts = [
 		OnlineFont.OFF,
 		OnlineFont.MPLUS1,
@@ -1007,13 +1008,43 @@
 		<span class="label-text">Show Connection Icon</span>
 		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$showConnectionIcon$} />
 		<span class="label-text">Highlight Known Word</span>
-		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableKnownWordColoring$} />
+		<input
+			type="checkbox"
+			class="checkbox checkbox-primary ml-2"
+			bind:checked={$enableKnownWordColoring$}
+			on:change={() => dispatch('highlightChange')}
+		/>
 		<span class="label-text">Highlight N+1</span>
-		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableNPlusOneColoring$} />
+		<input
+			type="checkbox"
+			class="checkbox checkbox-primary ml-2"
+			bind:checked={$enableNPlusOneColoring$}
+			on:change={() => dispatch('highlightChange')}
+		/>
+		<span class="label-text">Highlight Character Names</span>
+		<input
+			type="checkbox"
+			class="checkbox checkbox-primary ml-2"
+			bind:checked={$enableNameMatchColoring$}
+			on:change={() => dispatch('highlightChange')}
+		/>
 		<span class="label-text">Highlight Frequency</span>
-		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableFrequencyColoring$} />
+		<input
+			type="checkbox"
+			class="checkbox checkbox-primary ml-2"
+			bind:checked={$enableFrequencyColoring$}
+			on:change={() => dispatch('highlightChange')}
+		/>
 		<span class="label-text">Highlight JLPT</span>
-		<input type="checkbox" class="checkbox checkbox-primary ml-2" bind:checked={$enableJlptColoring$} />
+		<input
+			type="checkbox"
+			class="checkbox checkbox-primary ml-2"
+			bind:checked={$enableJlptColoring$}
+			on:change={() => dispatch('highlightChange')}
+		/>
+		<span class="label-text text-xs opacity-70" style="grid-column: 1/5;"
+			>Character-name highlighting needs character dictionary annotations. Standalone web use requires loading dictionary data manually.</span
+		>
 		<span class="label-text" style="grid-column: 1/5;">Custom CSS</span>
 		<textarea
 			class="p-1 min-h-[10rem] font-mono"

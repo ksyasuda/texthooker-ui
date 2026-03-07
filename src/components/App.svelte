@@ -30,6 +30,7 @@
 		enableFrequencyColoring$,
 		enableJlptColoring$,
 		enableKnownWordColoring$,
+		enableNameMatchColoring$,
 		enableNPlusOneColoring$,
 		filterNonCJKLines$,
 		flashOnMissedLine$,
@@ -67,6 +68,7 @@
 		reduceToEmptyString,
 		updateScroll,
 	} from '../util';
+	import { createLineItem, getLineSourceText, updateLineItemText } from '../line-state';
 	import { getPlainTextFromLineMarkup, normalizeLineMarkupForDisplay } from '../line-markup';
 	import DialogManager from './DialogManager.svelte';
 	import Icon from './Icon.svelte';
@@ -141,13 +143,16 @@
 		}),
 		tap((newLine: [string, LineType]) => {
 			const [lineContent] = newLine;
+			const renderedLine = renderLine(lineContent);
 			const text = transformLine(lineContent);
 
 			if (text) {
 				$lineData$ = applyEqualLineStartMerge([
 					...applyMaxLinesAndGetRemainingLineData(1),
-					{ id: generateRandomUUID(), text },
+					createLineItem(generateRandomUUID(), lineContent, text),
 				]);
+			} else if (tryUpgradeExistingLineMarkup(lineContent, renderedLine)) {
+				$lineData$ = applyEqualLineStartMerge(applyMaxLinesAndGetRemainingLineData());
 			}
 		}),
 		reduceToEmptyString(),
@@ -208,6 +213,7 @@
 
 	onMount(() => {
 		mountFunction();
+		updateLineData(true, false);
 		if (wakeLockAvailable) {
 			wakeLock = navigator.wakeLock
 				.request('screen')
@@ -279,13 +285,14 @@
 
 			if (text) {
 				const { id, index } = lineToRevert;
+				const sourceText = getLineSourceText(lineToRevert);
 
 				if (index > $lineData$.length - 1) {
-					$lineData$.push({ id, text });
+					$lineData$.push(createLineItem(id, sourceText, text));
 				} else if ($lineData$[index].id === id) {
-					$lineData$[index] = { id, text };
+					$lineData$[index] = createLineItem(id, sourceText, text);
 				} else {
-					$lineData$.splice(index, 0, { id, text });
+					$lineData$.splice(index, 0, createLineItem(id, sourceText, text));
 				}
 			}
 
@@ -459,14 +466,51 @@
 		return $removeAllWhitespace$ ? plainText.replace(/\s/gm, '').trim() : plainText;
 	}
 
-	function transformLine(text: string, useReplacements = true) {
+	function renderLine(text: string, useReplacements = true) {
 		const textToAppend = useReplacements ? applyReplacements(text, $enabledReplacements$) : text;
-		const renderedLine = normalizeLineMarkupForDisplay(textToAppend, {
+		return normalizeLineMarkupForDisplay(textToAppend, {
 			enableKnownWordColoring: $enableKnownWordColoring$,
 			enableNPlusOneColoring: $enableNPlusOneColoring$,
+			enableNameMatchColoring: $enableNameMatchColoring$,
 			enableFrequencyColoring: $enableFrequencyColoring$,
 			enableJlptColoring: $enableJlptColoring$,
 		});
+	}
+
+	function hasWordAnnotationMarkup(text: string) {
+		return /\bclass\s*=\s*(?:"[^"]*\bword\b[^"]*"|'[^']*\bword\b[^']*')/i.test(text);
+	}
+
+	function tryUpgradeExistingLineMarkup(sourceText: string, renderedLine: string) {
+		if (!hasWordAnnotationMarkup(sourceText)) {
+			return false;
+		}
+
+		const normalizedIncomingText = getNormalizedLineTextForComparison(renderedLine);
+		if (!normalizedIncomingText) {
+			return false;
+		}
+
+		for (let index = $lineData$.length - 1; index >= 0; index -= 1) {
+			const line = $lineData$[index];
+			if (getNormalizedLineTextForComparison(line.text) !== normalizedIncomingText) {
+				continue;
+			}
+
+			if (hasWordAnnotationMarkup(getLineSourceText(line))) {
+				return false;
+			}
+
+			$lineData$[index] = updateLineItemText(line, renderedLine, sourceText);
+			$lineData$ = $lineData$;
+			return true;
+		}
+
+		return false;
+	}
+
+	function transformLine(text: string, useReplacements = true) {
+		const renderedLine = renderLine(text, useReplacements);
 
 		let canAppend = true;
 		let lineToAppend = getNormalizedLineTextForComparison(renderedLine);
@@ -495,22 +539,15 @@
 		if (data && data.originalText !== data.newText) {
 			const text = transformLine(data.newText);
 
-			$lineData$[data.lineIndex] = {
-				id: data.line.id,
-				text,
-			};
-
 			if (text) {
+				$lineData$[data.lineIndex] = updateLineItemText(data.line, text, data.newText);
 				$actionHistory$ = [...$actionHistory$, [{ ...data.line, index: data.lineIndex }]];
 				$uniqueLines$.delete(getNormalizedLineTextForComparison(data.originalText));
 				$uniqueLines$.add(getNormalizedLineTextForComparison(text));
 			} else {
 				tick().then(
 					() =>
-						($lineData$[data.lineIndex] = {
-							id: data.line.id,
-							text: data.originalText,
-						}),
+						($lineData$[data.lineIndex] = data.line),
 				);
 			}
 		}
@@ -523,7 +560,7 @@
 		const startIndex = $maxLines$ ? $lineData$.length - $maxLines$ + diffMod : 0;
 		const remainingLineData =
 			startIndex > 0
-				? $lineData$.filter((oldLine, index) => {
+					? $lineData$.filter((oldLine, index) => {
 						if (index < startIndex) {
 							oldLinesToRemove.add(oldLine.id);
 
@@ -542,7 +579,7 @@
 		return remainingLineData;
 	}
 
-	function updateLineData(executeUpdate: boolean) {
+	function updateLineData(executeUpdate: boolean, showFeedback = true) {
 		if (!executeUpdate) {
 			return;
 		}
@@ -552,25 +589,29 @@
 		try {
 			for (let index = 0, { length } = $lineData$; index < length; index += 1) {
 				const line = $lineData$[index];
-				const newText = transformLine(line.text);
+				const newText = transformLine(getLineSourceText(line));
 
 				if (newText && newText !== line.text) {
 					$uniqueLines$.delete(getNormalizedLineTextForComparison(line.text));
 
-					$lineData$[index] = { ...line, text: newText };
+					$lineData$[index] = updateLineItemText(line, newText);
 				}
 			}
 
-			$openDialog$ = {
-				message: `Operation executed`,
-				showCancel: false,
-			};
+			if (showFeedback) {
+				$openDialog$ = {
+					message: `Operation executed`,
+					showCancel: false,
+				};
+			}
 		} catch ({ message }) {
-			$openDialog$ = {
-				type: 'error',
-				message: `An Error occured: ${message}`,
-				showCancel: false,
-			};
+			if (showFeedback) {
+				$openDialog$ = {
+					type: 'error',
+					message: `An Error occured: ${message}`,
+					showCancel: false,
+				};
+			}
 		}
 
 		$lineData$ = applyEqualLineStartMerge(applyMaxLinesAndGetRemainingLineData());
@@ -698,6 +739,7 @@
 		bind:selectedLineIds
 		bind:this={settingsComponent}
 		on:applyReplacements={() => updateLineData(!!$enabledReplacements$.length)}
+		on:highlightChange={() => updateLineData(true, false)}
 		on:layoutChange={executeUpdateScroll}
 		on:maxLinesChange={() => ($lineData$ = applyMaxLinesAndGetRemainingLineData())}
 	/>

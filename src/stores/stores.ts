@@ -64,10 +64,11 @@ export const defaultSettings: Settings = {
 	continuousReconnect$: true,
 	showConnectionErrors$: true,
 	showConnectionIcon$: true,
-	enableKnownWordColoring$: true,
-	enableNPlusOneColoring$: true,
-	enableFrequencyColoring$: true,
-	enableJlptColoring$: true,
+	enableKnownWordColoring$: false,
+	enableNPlusOneColoring$: false,
+	enableNameMatchColoring$: false,
+	enableFrequencyColoring$: false,
+	enableJlptColoring$: false,
 	customCSS$: '',
 };
 
@@ -260,6 +261,12 @@ export const enableNPlusOneColoring$ = writableBooleanSubject()(
 	defaultSettings.enableNPlusOneColoring$
 );
 
+export const enableNameMatchColoring$ = writableBooleanSubject()(
+	'bannou-texthooker-enableNameMatchColoring',
+	defaultSettings.enableNameMatchColoring$
+);
+
+
 export const enableFrequencyColoring$ = writableBooleanSubject()(
 	'bannou-texthooker-enableFrequencyColoring',
 	defaultSettings.enableFrequencyColoring$
@@ -391,6 +398,7 @@ export async function resetAllData() {
 	showConnectionIcon$.next(defaultSettings.showConnectionIcon$);
 	enableKnownWordColoring$.next(defaultSettings.enableKnownWordColoring$);
 	enableNPlusOneColoring$.next(defaultSettings.enableNPlusOneColoring$);
+	enableNameMatchColoring$.next(defaultSettings.enableNameMatchColoring$);
 	enableFrequencyColoring$.next(defaultSettings.enableFrequencyColoring$);
 	enableJlptColoring$.next(defaultSettings.enableJlptColoring$);
 	customCSS$.next(defaultSettings.customCSS$);
