@@ -68,10 +68,10 @@ function getAllowedWordClasses(
 	}
 
 	const emittedWinnerClass =
-		hasWordClass && hasNPlusOneClass && settings.enableNPlusOneColoring
-			? 'word-n-plus-one'
-			: hasWordClass && hasNameMatchClass && settings.enableNameMatchColoring
-				? 'word-name-match'
+		hasWordClass && hasNameMatchClass && settings.enableNameMatchColoring
+			? 'word-name-match'
+			: hasWordClass && hasNPlusOneClass && settings.enableNPlusOneColoring
+				? 'word-n-plus-one'
 				: hasWordClass && hasKnownClass && settings.enableKnownWordColoring
 					? 'word-known'
 					: null;
@@ -86,7 +86,7 @@ function getAllowedWordClasses(
 				allowed.add(className);
 			}
 		} else if (jlptClassPattern.test(className)) {
-			if (settings.enableJlptColoring && hasWordClass) {
+			if (settings.enableJlptColoring && hasWordClass && emittedWinnerClass !== 'word-name-match') {
 				allowed.add(className);
 			}
 		}
@@ -95,8 +95,16 @@ function getAllowedWordClasses(
 	return [...allowed];
 }
 
-function getAllowedWordAttributes(tag: string, settings: LineHighlightToggleSettings): string[] {
+function getAllowedWordAttributes(
+	tag: string,
+	classNames: string[],
+	settings: LineHighlightToggleSettings,
+): string[] {
 	const attributes: string[] = [];
+	const hasPrioritizedNameMatch =
+		classNames.includes('word') &&
+		classNames.includes('word-name-match') &&
+		settings.enableNameMatchColoring;
 
 	for (const attributeName of allowedDataAttributeNames) {
 		const value = getAttributeValue(tag, attributeName);
@@ -104,11 +112,17 @@ function getAllowedWordAttributes(tag: string, settings: LineHighlightToggleSett
 			continue;
 		}
 
-		if (attributeName === 'data-frequency-rank' && !settings.enableFrequencyColoring) {
+		if (
+			attributeName === 'data-frequency-rank' &&
+			(!settings.enableFrequencyColoring || hasPrioritizedNameMatch)
+		) {
 			continue;
 		}
 
-		if (attributeName === 'data-jlpt-level' && !settings.enableJlptColoring) {
+		if (
+			attributeName === 'data-jlpt-level' &&
+			(!settings.enableJlptColoring || hasPrioritizedNameMatch)
+		) {
 			continue;
 		}
 
@@ -146,7 +160,11 @@ export function normalizeLineMarkupForDisplay(
 				.map((value) => value.trim())
 				.filter(Boolean);
 			const allowedClasses = getAllowedWordClasses(classNames, resolvedSettings);
-			const allowedAttributes = getAllowedWordAttributes(tag, resolvedSettings);
+			const allowedAttributes = getAllowedWordAttributes(
+				tag,
+				classNames,
+				resolvedSettings,
+			);
 			const shouldEmitOpen = allowedClasses.length > 0;
 			spanStack.push(shouldEmitOpen);
 

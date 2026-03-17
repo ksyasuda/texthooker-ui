@@ -59,6 +59,19 @@ describe('normalizeLineMarkupForDisplay', () => {
 		expect(actual).toBe('<span class="word word-name-match">アレクシア</span>');
 	});
 
+	test('prefers name-match over n+1 and strips jlpt and frequency tagging', () => {
+		const actual = normalizeLineMarkupForDisplay(
+			'<span class="word word-name-match word-n-plus-one word-jlpt-n5" data-frequency-rank="12" data-jlpt-level="N5">アレクシア</span>',
+			{
+				enableNameMatchColoring: true,
+				enableNPlusOneColoring: true,
+				enableFrequencyColoring: true,
+				enableJlptColoring: true,
+			},
+		);
+		expect(actual).toBe('<span class="word word-name-match">アレクシア</span>');
+	});
+
 	test('drops name-match class when disabled and preserves known fallback', () => {
 		const actual = normalizeLineMarkupForDisplay(
 			'<span class="word word-name-match word-known">アレクシア</span>',
