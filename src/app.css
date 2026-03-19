@@ -457,17 +457,17 @@ p .word[data-jlpt-level]:hover::after {
 }
 
 p .word.word-known {
-	color: var(--sm-green);
+	color: var(--subminer-known-word-color, var(--sm-green));
 	text-shadow: 0 0 6px rgba(166, 218, 149, 0.35);
 }
 
 p .word.word-n-plus-one {
-	color: var(--sm-n-plus-one);
+	color: var(--subminer-n-plus-one-color, var(--sm-n-plus-one));
 	text-shadow: 0 0 6px rgba(198, 160, 246, 0.35);
 }
 
 p .word.word-name-match {
-	color: var(--sm-name-match);
+	color: var(--subminer-name-match-color, var(--sm-name-match));
 	text-shadow: 0 0 6px rgba(245, 189, 230, 0.35);
 }
 
@@ -475,60 +475,60 @@ p .word.word-jlpt-n1 {
 	text-decoration-line: underline;
 	text-decoration-thickness: 2px;
 	text-underline-offset: 4px;
-	text-decoration-color: var(--sm-red);
+	text-decoration-color: var(--subminer-jlpt-n1-color, var(--sm-red));
 	text-decoration-style: solid;
 }
 
 p .word.word-jlpt-n1[data-jlpt-level]::after {
-	color: var(--sm-red);
+	color: var(--subminer-jlpt-n1-color, var(--sm-red));
 }
 
 p .word.word-jlpt-n2 {
 	text-decoration-line: underline;
 	text-decoration-thickness: 2px;
 	text-underline-offset: 4px;
-	text-decoration-color: var(--sm-peach);
+	text-decoration-color: var(--subminer-jlpt-n2-color, var(--sm-peach));
 	text-decoration-style: solid;
 }
 
 p .word.word-jlpt-n2[data-jlpt-level]::after {
-	color: var(--sm-peach);
+	color: var(--subminer-jlpt-n2-color, var(--sm-peach));
 }
 
 p .word.word-jlpt-n3 {
 	text-decoration-line: underline;
 	text-decoration-thickness: 2px;
 	text-underline-offset: 4px;
-	text-decoration-color: var(--sm-yellow);
+	text-decoration-color: var(--subminer-jlpt-n3-color, var(--sm-yellow));
 	text-decoration-style: solid;
 }
 
 p .word.word-jlpt-n3[data-jlpt-level]::after {
-	color: var(--sm-yellow);
+	color: var(--subminer-jlpt-n3-color, var(--sm-yellow));
 }
 
 p .word.word-jlpt-n4 {
 	text-decoration-line: underline;
 	text-decoration-thickness: 2px;
 	text-underline-offset: 4px;
-	text-decoration-color: var(--sm-green);
+	text-decoration-color: var(--subminer-jlpt-n4-color, var(--sm-green));
 	text-decoration-style: solid;
 }
 
 p .word.word-jlpt-n4[data-jlpt-level]::after {
-	color: var(--sm-green);
+	color: var(--subminer-jlpt-n4-color, var(--sm-green));
 }
 
 p .word.word-jlpt-n5 {
 	text-decoration-line: underline;
 	text-decoration-thickness: 2px;
 	text-underline-offset: 4px;
-	text-decoration-color: var(--sm-accent);
+	text-decoration-color: var(--subminer-jlpt-n5-color, var(--sm-accent));
 	text-decoration-style: solid;
 }
 
 p .word.word-jlpt-n5[data-jlpt-level]::after {
-	color: var(--sm-accent);
+	color: var(--subminer-jlpt-n5-color, var(--sm-accent));
 }
 
 p .word.word-frequency-single,
@@ -541,27 +541,27 @@ p .word.word-frequency-band-5 {
 }
 
 p .word.word-frequency-single {
-	color: var(--sm-peach);
+	color: var(--subminer-frequency-single-color, var(--sm-peach));
 }
 
 p .word.word-frequency-band-1 {
-	color: var(--sm-red);
+	color: var(--subminer-frequency-band-1-color, var(--sm-red));
 }
 
 p .word.word-frequency-band-2 {
-	color: var(--sm-peach);
+	color: var(--subminer-frequency-band-2-color, var(--sm-peach));
 }
 
 p .word.word-frequency-band-3 {
-	color: var(--sm-yellow);
+	color: var(--subminer-frequency-band-3-color, var(--sm-yellow));
 }
 
 p .word.word-frequency-band-4 {
-	color: var(--sm-teal);
+	color: var(--subminer-frequency-band-4-color, var(--sm-teal));
 }
 
 p .word.word-frequency-band-5 {
-	color: var(--sm-accent);
+	color: var(--subminer-frequency-band-5-color, var(--sm-accent));
 }
 
 p

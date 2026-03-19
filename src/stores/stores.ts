@@ -277,6 +277,11 @@ export const enableJlptColoring$ = writableBooleanSubject()(
 	defaultSettings.enableJlptColoring$
 );
 
+export const characterDictionaryEnabled$ = writableBooleanSubject()(
+	'bannou-texthooker-characterDictionaryEnabled',
+	false
+);
+
 export const customCSS$ = writableStringSubject()('bannou-texthooker-customCSS', defaultSettings.customCSS$);
 
 export const timeValue$ = writableNumberSubject()('bannou-texthooker-timeValue', 0, persistStats$);

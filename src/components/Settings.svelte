@@ -20,6 +20,7 @@
 		autoStartTimerDuringPausePaste$,
 		blockCopyOnPage$,
 		blurStats$,
+		characterDictionaryEnabled$,
 		characterMilestone$,
 		continuousReconnect$,
 		customCSS$,
@@ -1043,7 +1044,9 @@
 			on:change={() => dispatch('highlightChange')}
 		/>
 		<span class="label-text text-xs opacity-70" style="grid-column: 1/5;"
-			>Character-name highlighting needs character dictionary annotations. Standalone web use requires loading dictionary data manually.</span
+			>{$characterDictionaryEnabled$
+				? 'Character dictionary annotations detected from SubMiner.'
+				: 'Character-name highlighting needs character dictionary annotations. Standalone web use requires loading dictionary data manually.'}</span
 		>
 		<span class="label-text" style="grid-column: 1/5;">Custom CSS</span>
 		<textarea
