@@ -2,7 +2,9 @@ import { filter, map, pipe } from 'rxjs';
 
 import type { ReplacementItem } from './types';
 
-export function dummyFn() {}
+export function dummyFn() {
+	return undefined;
+}
 
 export function reduceToEmptyString() {
 	return pipe(

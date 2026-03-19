@@ -194,29 +194,13 @@
 		}
 	}
 
-	function updateCustomCSS(customCSS: string) {
-		const textNode = document.createTextNode(customCSS);
-
-		let styleElement = document.getElementById('user-css');
-
-		if (styleElement) {
-			styleElement.replaceChild(textNode, styleElement.firstChild);
-		} else {
-			styleElement = document.createElement('style');
-			styleElement.id = 'user-css';
-
-			styleElement.appendChild(textNode);
-			document.head.append(styleElement);
-		}
-	}
-
 	function handleSettingsClick(event: MouseEvent) {
-		const target = event.target as any;
+		const target = event.target as Node | null;
 
 		if (
 			!$showSpinner$ &&
-			target !== settingsElement &&
-			target.parentElement !== settingsElement &&
+			target &&
+			!settingsElement.contains(target) &&
 			target !== dataFileInput &&
 			target !== settingsFileInput &&
 			target !== presetFileInput &&
@@ -398,7 +382,7 @@
 		presetFileInput.value = null;
 	}
 
-	async function handlePersistenceChange(settingEnabled: boolean, message: String, storageKey: string) {
+	async function handlePersistenceChange(settingEnabled: boolean, message: string, storageKey: string) {
 		if (settingEnabled) {
 			return;
 		}
@@ -416,7 +400,7 @@
 		}
 	}
 
-	function handleCharacterMilestoneBlur(event) {
+	function handleCharacterMilestoneBlur(event: FocusEvent) {
 		const target = event.target as HTMLInputElement;
 		const value = Number.parseInt(target.value || '0');
 
@@ -433,7 +417,7 @@
 		target.value = `${$characterMilestone$}`;
 	}
 
-	function handlePreventLastDuplicateBlur(event) {
+	function handlePreventLastDuplicateBlur(event: FocusEvent) {
 		const target = event.target as HTMLInputElement;
 		const value = Number.parseInt(target.value || '0');
 		const wasChange = value !== $preventLastDuplicate$;
@@ -488,7 +472,7 @@
 		selectedLineIds = selectedLineIds.filter((selectedLineId) => !removedIds.has(selectedLineId));
 	}
 
-	function handleMaxLinesBlur(event) {
+	function handleMaxLinesBlur(event: FocusEvent) {
 		const target = event.target as HTMLInputElement;
 		const value = Number.parseInt(target.value || '0');
 		const wasChange = value !== $maxLines$;
@@ -506,7 +490,7 @@
 		}
 	}
 
-	function handleMaxPipLinesBlur(event) {
+	function handleMaxPipLinesBlur(event: FocusEvent) {
 		const target = event.target as HTMLInputElement;
 		const value = Number.parseInt(target.value || '0');
 

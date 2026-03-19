@@ -38,7 +38,7 @@
 		};
 	});
 
-	function handleSocketState(socketStateValue) {
+	function handleSocketState(socketStateValue: number) {
 		switch (socketStateValue) {
 			case 0:
 				wasConnected = false;
@@ -48,7 +48,7 @@
 				intitialAttemptDone = true;
 				wasConnected = true;
 				break;
-			case 3:
+			case 3: {
 				const socketType = isPrimary ? 'primary' : 'secondary';
 				const socketUrl = isPrimary ? $websocketUrl$ : $secondaryWebsocketUrl$;
 
@@ -78,6 +78,7 @@
 				}
 
 				break;
+			}
 
 			default:
 				break;

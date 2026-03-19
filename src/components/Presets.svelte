@@ -22,6 +22,7 @@
 		enableJlptColoring$,
 		enableLineAnimation$,
 		enableKnownWordColoring$,
+		enableNameMatchColoring$,
 		enableNPlusOneColoring$,
 		enablePaste$,
 		filterNonCJKLines$,
@@ -117,6 +118,7 @@
 			showConnectionIcon$: $showConnectionIcon$,
 			enableKnownWordColoring$: $enableKnownWordColoring$,
 			enableNPlusOneColoring$: $enableNPlusOneColoring$,
+			enableNameMatchColoring$: $enableNameMatchColoring$,
 			enableFrequencyColoring$: $enableFrequencyColoring$,
 			enableJlptColoring$: $enableJlptColoring$,
 			customCSS$: $customCSS$,
@@ -186,6 +188,9 @@
 		);
 		enableNPlusOneColoring$.next(
 			preset.settings.enableNPlusOneColoring$ ?? defaultSettings.enableNPlusOneColoring$,
+		);
+		enableNameMatchColoring$.next(
+			preset.settings.enableNameMatchColoring$ ?? defaultSettings.enableNameMatchColoring$,
 		);
 		enableFrequencyColoring$.next(
 			preset.settings.enableFrequencyColoring$ ?? defaultSettings.enableFrequencyColoring$,

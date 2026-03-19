@@ -1,4 +1,8 @@
 declare global {
+	interface ImportMeta {
+		dir: string;
+	}
+
 	interface Window {
 		documentPictureInPicture: {
 			requestWindow: (arg?: {
@@ -11,4 +15,3 @@ declare global {
 }
 
 export { };
-

@@ -17,7 +17,7 @@
 
 	let sortableInstance: Sortable;
 	let listContainer: HTMLDivElement;
-	let listItems = JSON.parse(JSON.stringify($replacements$));
+	let listItems: ReplacementItem[] = JSON.parse(JSON.stringify($replacements$));
 
 	$: canApplyReplacements = !!$lineData$.length && !!$enabledReplacements$.length;
 
@@ -44,7 +44,7 @@
 	function onToggle(newValue: boolean) {
 		const sortedList = getSortedList();
 
-		listItems = sortedList.map((replacement) => ({ ...replacement, enabled: newValue }));
+		listItems = sortedList.map((replacement: ReplacementItem) => ({ ...replacement, enabled: newValue }));
 		$replacements$ = listItems;
 	}
 
@@ -60,13 +60,18 @@
 	}
 
 	function getSortableList() {
-		return [...listItems.map((replacments) => replacments.pattern)];
+		return [...listItems.map((replacement: ReplacementItem) => replacement.pattern)];
 	}
 
 	function getSortedList() {
 		const sortedList = sortableInstance.toArray();
 
-		return listItems.slice().sort((a, b) => sortedList.indexOf(a.pattern) - sortedList.indexOf(b.pattern));
+		return listItems
+			.slice()
+			.sort(
+				(a: ReplacementItem, b: ReplacementItem) =>
+					sortedList.indexOf(a.pattern) - sortedList.indexOf(b.pattern),
+			);
 	}
 </script>
 

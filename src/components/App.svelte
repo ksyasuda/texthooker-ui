@@ -58,7 +58,7 @@
 		theme$,
 		websocketUrl$,
 	} from '../stores/stores';
-	import { LineType, OnlineFont, Theme, type LineItem, type LineItemEditEvent } from '../types';
+	import { LineType, OnlineFont, type LineItem, type LineItemEditEvent } from '../types';
 	import {
 		applyAfkBlur,
 		applyCustomCSS,
@@ -83,7 +83,6 @@
 	let isSmFactor = false;
 	let settingsComponent: Settings;
 	let selectedLineIds: string[] = [];
-	let settingsContainer: HTMLElement;
 	let settingsElement: SVGElement;
 	let settingsOpen = false;
 	let lineContainer: HTMLElement;
@@ -94,7 +93,6 @@
 	let pipContainer: HTMLElement;
 	let pipWindow: Window | undefined;
 	let pipResizeTimeout: number;
-	let hasPipFocus = false;
 
 	const wakeLockAvailable = 'wakeLock' in navigator;
 
@@ -379,8 +377,6 @@
 
 		pipWindow.addEventListener('pagehide', onPipHide, { once: true });
 		pipWindow.addEventListener('resize', onPipResize, false);
-		pipWindow.addEventListener('blur', onPipFocusBlur, false);
-		pipWindow.addEventListener('focus', onPipFocusBlur, false);
 
 		[...document.styleSheets].forEach((styleSheet) => {
 			if (styleSheet.ownerNode instanceof Element && styleSheet.ownerNode.id === 'user-css') {
@@ -409,10 +405,7 @@
 		updatePipDimensions();
 
 		pipWindow.removeEventListener('resize', onPipResize, false);
-		pipWindow.removeEventListener('blur', onPipFocusBlur, false);
-		pipWindow.removeEventListener('focus', onPipFocusBlur, false);
 
-		hasPipFocus = false;
 		pipWindow = undefined;
 	}
 
@@ -429,10 +422,6 @@
 
 		$lastPipHeight$ = pipWindow.document.body.clientHeight;
 		$lastPipWidth$ = pipWindow.document.body.clientWidth;
-	}
-
-	function onPipFocusBlur(event: Event) {
-		hasPipFocus = event.type === 'focus';
 	}
 
 	function onAfkBlur({ detail: isAfk }: CustomEvent<boolean>) {
@@ -533,7 +522,7 @@
 		return canAppend ? renderedLine : undefined;
 	}
 
-	function handleLineEdit(event) {
+	function handleLineEdit(event: CustomEvent<LineItemEditEvent>) {
 		const { inEdit, data } = event.detail as LineItemEditEvent;
 
 		if (data && data.originalText !== data.newText) {
@@ -658,7 +647,7 @@
 
 <DialogManager />
 
-<header class="fixed top-0 right-0 left-0 flex justify-end items-center px-3 py-2" bind:this={settingsContainer}>
+<header class="fixed top-0 right-0 left-0 flex justify-end items-center px-3 py-2">
 	<Stats on:afkBlur={onAfkBlur} />
 	{#if $websocketUrl$}
 		<SocketConnector />
